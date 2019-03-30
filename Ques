@@ -1,0 +1,127 @@
+#include<iostream>
+using namespace std;
+
+//Forming class node 
+class node{
+	public:
+	int data;
+	node * left;
+	node * right;
+	node * parent;  //introducing the parent 
+	node(int value){
+   data=value;
+	 left=NULL;
+	 right=NULL;
+	 parent=NULL;
+	}
+};
+
+class BST{
+	public:
+	node * root;
+	BST(){
+  	root=NULL;
+	}
+	void insert(int value){
+	  inserthelper(root,value);
+	}
+	void inserthelper(node * curr,int value){
+	//base case if cur is null, insert there
+  	if(curr==NULL){
+    curr=new node(value);
+	  if(root==NULL){
+	  root=curr;
+	   } 
+	 }
+
+		else if(value < curr->data){
+			//if value<curr data-> move to left and call insertH
+			if(curr->left==NULL) {
+			curr->left=new node(value);
+			}
+			 inserthelper(curr->left,value);
+		}
+		else if(value > curr->data){
+			//else move right and call insertH
+			if(curr->right==NULL) {
+			curr->right=new node(value);
+			}
+			else inserthelper(curr->right,value);
+		}	
+
+	}
+	void display(){
+		display2(root);
+	}
+	void display2(node * curr){
+		//base condition
+		if(curr==NULL) return;
+		  //display left
+		  display2(curr->left);
+		  cout<<curr->data<<"  ";
+		  //dis right
+		  display2(curr->right);
+	}
+	/*
+	node * find_min(node * curr,int value){
+	  while (curr->left==NULL){
+	  return find_min(curr->left,value);}
+	}
+  */	
+	node * search(int value){
+	  return searchhelper(root,value);
+	}	
+	node* searchhelper(node*curr,int value){
+	  //Are you the value? or Are you NULL? if yes return curr
+	  if (curr==NULL||curr->data==value) return curr;
+	  //else you search both sides 
+	  //left
+	  else if(value<curr->data)return searchhelper(curr->left,value);
+	  //right
+	  else return searchhelper(curr->right,value);
+	 	}
+	
+  void print2DHelper(node *root, int space)  
+    {  
+        // Base case  
+        if (root == NULL)  
+            return;  
+        // Increase distance between levels  
+        space += 5;  
+        // Process right child first  
+        print2DHelper(root->right, space);  
+    
+        // Print current node after space  
+        // count  
+        cout<<endl;  
+        for (int i = 5; i < space; i++)  
+            cout<<" ";  
+        cout<<root->data<<"\n";  
+    
+        // Process left child  
+        print2DHelper(root->left, space);  
+    }  
+  
+    // To show different trees
+    void printfancy2D(){ 
+      cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+      print2DHelper(root, 0);//Spacing starting from 0
+      cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+    }
+};
+
+int main(){
+	BST b1;
+	b1.insert(72);
+	b1.insert(27);
+	b1.insert(22);	
+	b1.insert(77);
+	cout<<"the in-order display will show up in ascending order, ie. display : ";
+	b1.display();
+	if (b1.search(22)!=NULL){
+	cout<<endl<<"we want to search for 22: ";
+	cout<<b1.search(22)->data<<endl;
+	}
+	b1.printfancy2D();
+return 0;	
+}
